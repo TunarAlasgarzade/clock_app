@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:clock_app/themes/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TimerPage extends StatefulWidget {
   const TimerPage({super.key});
@@ -102,10 +104,21 @@ class _TimerPageState extends State<TimerPage> {
     final seconds = remainingSeconds % 60;
     final formattedSeconds = seconds.toString().padLeft(2, "0");
     return Scaffold(
-    backgroundColor: Colors.white,
+    backgroundColor: Theme.of(context).colorScheme.surface,
     appBar: AppBar(
       title: Text("Timer", style: TextStyle(color: Colors.white),),
       backgroundColor: Colors.green,
+      actions: [
+        IconButton(
+          onPressed: () {
+            Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+          }, 
+          icon: Icon(
+            Provider.of<ThemeProvider>(context).isDarkMode == true 
+              ? Icons.wb_sunny : Icons.nightlight_round, color: Colors.white,
+          )
+        )
+      ],
     ),
       body: Center(
         child: isFinished == true ? Column(
@@ -198,7 +211,7 @@ class _TimerPageState extends State<TimerPage> {
               ElevatedButton(
                 onPressed: () {startTimer();},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                 ),
                 child: const Text(
                   "Start",

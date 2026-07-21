@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
       ),
       bottomNavigationBar: NavigationBar(
         indicatorColor: Colors.green.withValues(alpha: 0.4),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
         selectedIndex: selectedIndex,
         onDestinationSelected: (value) {
           setState(() {
@@ -32,11 +32,11 @@ class _HomePageState extends State<HomePage> {
         },
         destinations: [
           NavigationDestination(
-            icon: Icon(Icons.timer), 
+            icon: Icon(Icons.timer, color: Theme.of(context).colorScheme.onSurface), 
             label: "Stopwatch",
           ),
           NavigationDestination(
-            icon: Icon(Icons.hourglass_bottom_rounded), 
+            icon: Icon(Icons.hourglass_bottom_rounded, color: Theme.of(context).colorScheme.onSurface), 
             label: "Timer",
           )
         ]

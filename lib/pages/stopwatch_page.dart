@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:clock_app/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StopwatchPage extends StatefulWidget {
   const StopwatchPage({super.key});
@@ -80,10 +82,21 @@ class _StopwatchPageState extends State<StopwatchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text("Stopwarch", style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+            }, 
+            icon: Icon(
+              Provider.of<ThemeProvider>(context).isDarkMode == true 
+                ? Icons.wb_sunny : Icons.nightlight_round, color: Colors.white,
+            )
+          )
+        ],
       ),
       body: Center(
         child: Column(
@@ -97,7 +110,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
                  ElevatedButton(
                   onPressed: () { resetTimer(); },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                   ),
                   child: const Text(
                     "Reset",
@@ -107,7 +120,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
                 ElevatedButton(
                   onPressed: () {startOrPauseTimer();},
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                   ), 
                   child: Text(
                     timer == null ? "Start" : "Pause", 
