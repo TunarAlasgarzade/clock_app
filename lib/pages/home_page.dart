@@ -1,6 +1,8 @@
+import 'package:clock_app/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:clock_app/pages/stopwatch_page.dart';
 import 'package:clock_app/pages/timer_page.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,9 +13,30 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          selectedIndex == 0 ? "Stopwarch" : "Timer", 
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.green,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+            }, 
+            icon: Icon(
+              Provider.of<ThemeProvider>(context).isDarkMode
+              ? Icons.wb_sunny 
+              : Icons.nightlight_round, 
+              color: Colors.white,
+            )
+          )
+        ],
+      ),
       body: IndexedStack(
         index: selectedIndex,
         children: [

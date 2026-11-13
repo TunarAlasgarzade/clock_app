@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:clock_app/themes/theme_provider.dart';
+import 'package:clock_app/components/my_button.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class StopwatchPage extends StatefulWidget {
   const StopwatchPage({super.key});
@@ -14,7 +13,6 @@ class _StopwatchPageState extends State<StopwatchPage> {
   Duration time = Duration.zero;
   Timer? timer;
 
-  // start timer function
   void startTimer() {
     if (timer != null) {
       return;
@@ -31,7 +29,6 @@ class _StopwatchPageState extends State<StopwatchPage> {
     });
   }
 
-  // pause timer function
   void pauseTimer() {
     setState(() {
       timer?.cancel();
@@ -39,7 +36,6 @@ class _StopwatchPageState extends State<StopwatchPage> {
     });
   }
 
-  // reset timer function
   void resetTimer() {
     pauseTimer();
     setState(() {
@@ -47,7 +43,6 @@ class _StopwatchPageState extends State<StopwatchPage> {
     });
   }
 
-  // start or pause timer
   void startOrPauseTimer() {
     if (timer == null) {
       startTimer();
@@ -56,7 +51,6 @@ class _StopwatchPageState extends State<StopwatchPage> {
     }
   }
 
-  // format time
   String formatTime() {
     final hours = time.inHours;
     final formattedHours = hours.toString().padLeft(2, "0");
@@ -74,58 +68,26 @@ class _StopwatchPageState extends State<StopwatchPage> {
   }
 
   @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        title: Text("Stopwarch", style: TextStyle(color: Colors.white),),
-        backgroundColor: Colors.green,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
-            }, 
-            icon: Icon(
-              Provider.of<ThemeProvider>(context).isDarkMode == true 
-                ? Icons.wb_sunny : Icons.nightlight_round, color: Colors.white,
-            )
-          )
-        ],
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(formatTime(), style: TextStyle(fontSize: 60),),
+            Text(formatTime(), style: TextStyle(fontSize: 60)),
             const SizedBox(height: 20,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                 ElevatedButton(
-                  onPressed: () { resetTimer(); },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                if (time != Duration.zero)
+                  MyButton(
+                    onPressed: resetTimer,
+                    text: "Reset",
                   ),
-                  child: const Text(
-                    "Reset",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {startOrPauseTimer();},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                  ), 
-                  child: Text(
-                    timer == null ? "Start" : "Pause", 
-                    style: TextStyle(color: Colors.white)
-                  ),
+                MyButton(
+                  onPressed: startOrPauseTimer,
+                  text: timer == null ? "Start" : "Stop",
                 ),
               ],
             ),
