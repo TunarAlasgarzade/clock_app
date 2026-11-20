@@ -1,3 +1,4 @@
+import 'package:clock_app/components/settings_sheet.dart';
 import 'package:clock_app/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:clock_app/pages/stopwatch_page.dart';
@@ -24,6 +25,18 @@ class _HomePageState extends State<HomePage> {
         ),
         backgroundColor: Colors.green,
         actions: [
+          if (selectedIndex == 1)
+          IconButton(
+            onPressed: () => showModalBottomSheet(
+              context: context, 
+              builder: (context) => SettingsSheet(),
+              useSafeArea: true
+            ), 
+            icon: Icon(
+              Icons.settings, 
+              color: Colors.white
+            )
+          ),
           IconButton(
             onPressed: () {
               Provider.of<ThemeProvider>(context, listen: false).toggleTheme();

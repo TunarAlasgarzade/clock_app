@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:clock_app/components/my_button.dart';
+import 'package:clock_app/providers/settings_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vibration/vibration.dart';
 
 class TimerPage extends StatefulWidget {
   const TimerPage({super.key});
@@ -86,9 +89,12 @@ class _TimerPageState extends State<TimerPage> {
       selectedMinutes = 0;
       selectedSeconds = 0;
     });
+    await Vibration.cancel();
   }
 
   Future<void> finishTimer() async {
+    final settings = Provider.of<SettingsProvider>(context, listen: false);
+
     isRunning = false;
     isFinished = true;
     timer?.cancel();
@@ -97,12 +103,20 @@ class _TimerPageState extends State<TimerPage> {
     selectedHours = 0;
     selectedMinutes = 0;
     selectedSeconds = 0;
-    await player.setReleaseMode(
-      ReleaseMode.loop
-    );
-    await player.play(
-      AssetSource("sounds/alarm.mp3")
-    );
+    if (settings.sound) {
+      await player.setReleaseMode(
+        ReleaseMode.loop
+      );
+      await player.play(
+        AssetSource("sounds/alarm.mp3")
+      );
+    }
+    if (settings.vibration) {
+      await Vibration.vibrate(
+        pattern: [0, 500, 1000],
+        repeat: 0,
+      );
+    }
   }
   
   String formatTime(int seconds) {
@@ -115,6 +129,14 @@ class _TimerPageState extends State<TimerPage> {
     return hours > 0 
       ? "$formattedHours:$formattedMinutes:$formattedSeconds"
       : "$formattedMinutes:$formattedSeconds";
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    unawaited(player.dispose());
+    unawaited(Vibration.cancel());
+    super.dispose();
   }
 
   @override
@@ -282,7 +304,7 @@ class _TimerPageState extends State<TimerPage> {
         ),
         SizedBox(height: 200),
         MyButton(
-          onPressed: () {resetTimer();},
+          onPressed: resetTimer,
           text: "Dismiss",
         ),
       ],

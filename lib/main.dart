@@ -1,3 +1,4 @@
+import 'package:clock_app/providers/settings_provider.dart';
 import 'package:clock_app/themes/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:clock_app/pages/home_page.dart';
@@ -5,8 +6,15 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SettingsProvider(),
+        ),
+      ],
       child: const MyApp(),
     ) 
   );

@@ -8,7 +8,9 @@ A simple clock app built with Flutter.
 - Timer
 - Pause and resume timer
 - Circular progress indicator
-- Plays a sound when the timer finishes
+- Sound notification when the timer finishes
+- Repeating vibration notification when the timer finishes
+- Customizable sound and vibration settings
 - Keeps running when switching between pages
 - Dark mode support
 
@@ -27,6 +29,12 @@ Clone the repository:
 git clone https://github.com/TunarAlasgarzade/clock_app.git
 ```
 
+Navigate to the project directory:
+
+```bash
+cd clock_app
+```
+
 Install dependencies:
 
 ```bash
@@ -41,8 +49,9 @@ flutter run
 
 ## Built With
 
-- Flutter
-- Dart
-- audioplayers
-- shared_preferences
-- provider
+- [Flutter](https://flutter.dev/)
+- [Dart](https://dart.dev/)
+- [audioplayers](https://pub.dev/packages/audioplayers)
+- [vibration](https://pub.dev/packages/vibration)
+- [shared_preferences](https://pub.dev/packages/shared_preferences)
+- [provider](https://pub.dev/packages/provider)
