@@ -44,7 +44,7 @@ class _TimerPageState extends State<TimerPage> {
     }
     if (remainingSeconds == 0) {
       final hourInSeconds = selectedHours * 60 * 60;
-      final minuteInSeconds =selectedMinutes * 60;
+      final minuteInSeconds = selectedMinutes * 60;
       totalSeconds = selectedSeconds + minuteInSeconds + hourInSeconds;
       remainingSeconds = totalSeconds;
     }
@@ -100,9 +100,6 @@ class _TimerPageState extends State<TimerPage> {
     timer?.cancel();
     timer = null;
     remainingSeconds = 0;
-    selectedHours = 0;
-    selectedMinutes = 0;
-    selectedSeconds = 0;
     if (settings.sound) {
       await player.setReleaseMode(
         ReleaseMode.loop
@@ -119,6 +116,19 @@ class _TimerPageState extends State<TimerPage> {
     }
   }
   
+  Future<void> restartTimer() async {
+    await player.stop();
+    await Vibration.cancel();
+    setState(() {
+      timer?.cancel();
+      timer = null;
+      isFinished = false;
+      remainingSeconds = totalSeconds;
+      isRunning = true;
+    });
+    startTimer();
+  }
+
   String formatTime(int seconds) {
     final hours = seconds ~/ 3600;
     final minutes = (seconds % 3600) ~/ 60;
@@ -303,9 +313,18 @@ class _TimerPageState extends State<TimerPage> {
           style: TextStyle(fontSize: 30, color: Colors.green),
         ),
         SizedBox(height: 200),
-        MyButton(
-          onPressed: resetTimer,
-          text: "Dismiss",
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            MyButton(
+              onPressed: restartTimer,
+              text: "Restart",
+            ),
+            MyButton(
+              onPressed: resetTimer,
+              text: "Dismiss",
+            ),
+          ],
         ),
       ],
     );
